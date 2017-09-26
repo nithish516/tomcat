@@ -34,22 +34,25 @@
   copy: src=tomcat-initscript.sh dest=/etc/init.d/tomcat mode=0755
 
 - name: Start Tomcat
-  service: name=tomcat state=started enabled=yes
+  service: name=tomcat state=restarted enabled=yes
 
 - name: deploy iptables rules
   template: src=iptables-save dest=/etc/sysconfig/iptables
   when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version == '6'"
   notify: restart iptables
 
-#- name: Stating Tomacat with cmd
+#- name: Starting Tomcat with cmd
 #  become_method: sudo
-#  #script: /opt/apache-tomcat-7.0.61/bin/catalina.sh --some-arguments start
-#  #args:
-#  #  chdir: "/opt/apache-tomcat-7.0.61/bin"
-#  shell: "/opt/apache-tomcat-7.0.61/bin/start.sh"
-#    args:
-#      chdir: "/opt/apache-tomcat-7.0.61/bin"
-#      executable: "/bin/bash"
+#  script: /opt/apache-tomcat-7.0.61/bin/catalina.sh --some-arguments start  
+#  args:
+#    chdir: "/opt/apache-tomcat-7.0.61/bin"
+
+- name: Starting Tomcat with bin file
+  become_method: sudo
+  shell: "/opt/apache-tomcat-7.0.61/bin/startup.sh"
+  args:
+    chdir: "/opt/apache-tomcat-7.0.61/bin"
+    executable: "/bin/bash"
 
 - name: Enable firewalld
   service: name=firewalld state=started enabled=yes
@@ -63,11 +66,12 @@
   when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'"
 
 - name: wait for tomcat to start
-  wait_for: port={{http_port}}
+  wait_for: port=8080
 
 - name: Downloading artifact
+  become_method: sudo
   get_url:
-    url: http://34.214.49.13:8081/nexus/service/local/repositories/releases/content/com/mkyong/CounterWebApp/1.0/CounterWebApp-1.0.war
-    dest: /usr/share/tomcat/webapps
+    url: http://34.207.112.95:8081/nexus-2.14.5-02/content/repositories/releases/org/sonatype/mavenbook/simple_webapp/1.1/simple_webapp-1.1.war
+    dest: /usr/share/tomcat/webapps/
 
 

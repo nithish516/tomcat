@@ -1,21 +1,20 @@
 ---
 - name: Provision an EC2 Instance
-  hosts: local
-  connection: local
+  hosts: localhost
   gather_facts: False
   tags: provisioning
   
   roles:
     - ec2
-
-- hosts: webserver
+- name: install tomcat
+  hosts: ec2hosts
   become: yes
   become_method: sudo
 
   roles:
-    - selinux
-    - tomcat    
     - firewalld
+    - selinux
+    - tomcat   
     
   vars:
     # Here are variables related to the Tomcat installation

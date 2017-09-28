@@ -12,11 +12,11 @@
 
 - name: Add the newly created EC2 instance(s) to the local host group (located inside the directory)
   add_host:
-    hostname: {{ item.public_ip }}
-    groupname: ec2hosts
-    host_key_checking: False
-    ansible_ssh_user: centos
-    ansible_ssh_port: 22
+    hostname={{ item.public_ip }}
+    groupname=ec2hosts
+    host_key_checking=False
+    ansible_ssh_user=centos
+    ansible_ssh_port=22
   with_items: "{{ ec2.instances }}"
 
 

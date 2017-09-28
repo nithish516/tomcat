@@ -1,20 +1,10 @@
 ---
 - name: Provision an EC2 Instance
   hosts: localhost
-  gather_facts: False
   tags: provisioning
   
   roles:
     - ec2
-- name: install tomcat
-  hosts: ec2hosts
-  become: yes
-  become_method: sudo
-
-  roles:
-    - firewalld
-    - selinux
-    - tomcat   
     
   vars:
     # Here are variables related to the Tomcat installation
@@ -45,3 +35,13 @@
         zone: public
         permanent: true
 
+- name: install tomcat
+  hosts: ec2hosts
+  gather_facts: True
+  become: yes
+  become_method: sudo
+
+  roles:
+    - firewalld
+    - selinux
+    - tomcat 

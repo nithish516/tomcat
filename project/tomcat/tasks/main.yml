@@ -22,6 +22,10 @@
 - name: Change ownership of Tomcat installation
   file: path=/usr/share/tomcat/ owner=tomcat group=tomcat state=directory recurse=yes
 
+#- name: Configure Tomcat server
+#  template: src=server.xml dest=/usr/share/tomcat/conf/
+# notify: restart tomcat
+  
 - name: Configure Tomcat server
   template: src=server.xml dest=/usr/share/tomcat/conf/
   notify: restart tomcat
@@ -66,7 +70,7 @@
   when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'"
 
 - name: wait for tomcat to start
-  wait_for: port=8080
+  wait_for: port={{http_port}}
 
 - name: Downloading artifact
   become_method: sudo

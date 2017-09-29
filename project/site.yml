@@ -6,6 +6,12 @@
   roles:
     - ec2
     
+- name: install tomcat
+  hosts: ec2hosts
+  gather_facts: True
+  become: yes
+  become_method: sudo   
+    
   vars:
     # Here are variables related to the Tomcat installation
     http_port: 8080
@@ -34,12 +40,6 @@
         state: enabled
         zone: public
         permanent: true
-
-- name: install tomcat
-  hosts: ec2hosts
-  gather_facts: True
-  become: yes
-  become_method: sudo
 
   roles:
     - firewalld

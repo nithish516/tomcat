@@ -75,7 +75,7 @@
 - name: Downloading artifact
   become_method: sudo
   get_url:
-    url: http://34.207.112.95:8081/nexus-2.14.5-02/content/repositories/releases/org/sonatype/mavenbook/simple_webapp/1.1/simple_webapp-1.1.war
+    url: http://54.174.174.90:8081/nexus-2.14.5-02/content/repositories/releases/org/sonatype/mavenbook/simple_webapp/1.1/simple_webapp-1.1.war
     dest: /usr/share/tomcat/webapps/
 
 
